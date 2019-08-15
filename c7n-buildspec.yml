@@ -13,7 +13,8 @@ phases:
       - virtualenv .c7n --python=python2
       - . .c7n/bin/activate # . is the dash version of source
       - pip install --upgrade c7n
-      - .c7n/bin/deactivate
+      - ls -lah .c7n/bin
+      - .c7n/bin/deactivate || exit 0
 
   pre_build:
     commands:

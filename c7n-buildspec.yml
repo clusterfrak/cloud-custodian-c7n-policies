@@ -10,6 +10,7 @@ phases:
       - apt-get install -y jq
       - pip install awscli virtualenv
       - cd $CODEBUILD_SRC_DIR
+      - /bin/bash || exit 0 # Get into a real shell... 
       - virtualenv .c7n --python=python2
       - . .c7n/bin/activate # . is the dash version of source
       - pip install --upgrade c7n

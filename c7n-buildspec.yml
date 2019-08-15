@@ -11,9 +11,9 @@ phases:
       - pip install awscli virtualenv
       - cd $CODEBUILD_SRC_DIR
       - virtualenv .c7n --python=python2
-      - . .c7n/bin/activate
+      - . .c7n/bin/activate # . is the dash version of source
       - pip install --upgrade c7n
-      - deactivate
+      - .c7n/bin/deactivate
 
   pre_build:
     commands:

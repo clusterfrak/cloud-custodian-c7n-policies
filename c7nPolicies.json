@@ -1,6 +1,6 @@
 [
     {
         "PolicyFile": "c7n-autopark.yml",
-        "DryRun": true
+        "DryRun": false
     }
 ]

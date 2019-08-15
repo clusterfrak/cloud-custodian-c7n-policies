@@ -10,7 +10,7 @@ phases:
       - apt-get install -y jq
       - pip install awscli virtualenv
       - mkdir -p $CODEBUILD_SRC_DIR/c7n
-      - virtenv $CODEBUILD_SRC_DIR/c7n --python=python2
+      - virtualenv $CODEBUILD_SRC_DIR/c7n --python=python2
       - source $CODEBUILD_SRC_DIR/c7n/bin/activate
       - pip install --upgrade c7n
       - deactivate

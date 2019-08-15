@@ -21,9 +21,9 @@ phases:
       - echo "Running C7N policies marked for DryRun only..."
       # - POLICY_LIST=$(find . -type f \( -name "*.yml" -o -name "*.yaml" \) ! -name "*buildspec*" -execdir echo {} ';') | xargs
       - POLICY_DRYRUN_LIST=$(cat c7nPolicies.json | jq '.[] | select(.DryRun==true) | .PolicyFile')
-      - for policy in `echo $POLICY_DRYRUN_LIST`; do $CODEBUILD_SRC_DIR/c7n/bin/custodian run --dryrun -s out $file; done
+      - for policy in `echo $POLICY_DRYRUN_LIST`; do $CODEBUILD_SRC_DIR/c7n/bin/custodian run --dryrun -s out $policy; done
   build:
     commands:
       - echo "Running C7N policies marked for deployment..."
       - POLICY_RUN_LIST=$(cat c7nPolicies.json | jq '.[] | select(.DryRun==false) | .PolicyFile')
-      - for policy in `echo $POLICY_RUN_LIST`; do $CODEBUILD_SRC_DIR/c7n/bin/custodian run -s out $file; done
+      - for policy in `echo $POLICY_RUN_LIST`; do $CODEBUILD_SRC_DIR/c7n/bin/custodian run -s out $policy; done

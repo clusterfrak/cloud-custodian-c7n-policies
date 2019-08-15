@@ -9,7 +9,7 @@ policies:
       - "tag:C7N_AutoPark_DISABLED": absent
       - type: offhour
         default_tz: "utc"
-        offhour: 21
+        offhour: 12
         tag: C7N_Scheduled_Downtime
     mode:
       type: periodic
@@ -26,7 +26,7 @@ policies:
       - "tag:C7N_AutoPark_DISABLED": absent
       - type: onhour
         default_tz: "utc"
-        onhour: 5
+        onhour: 13
         tag: C7N_Scheduled_Downtime
     mode:
       schedule: "rate(60 minutes)"

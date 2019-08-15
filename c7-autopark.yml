@@ -1,0 +1,35 @@
+# https://cloudcustodian.io/docs/azure/policy/index.html
+# https://cloudcustodian.io/docs/aws/examples/offhours.html#offhours
+policies:
+  - name: ec2-autopark-stop-instances
+    description: Stop non essential EC2 instances on a set schedule
+    resource: aws.ec2
+    comments: Stop EC2 instances as per schedule in C7N_AutoPark_OffHours
+    filters:
+      - "tag:C7N_AutoPark_DISABLED": absent
+      - type: offhour
+        default_tz: "utc"
+        offhour: 21
+        tag: C7N_Scheduled_Downtime
+    mode:
+      type: periodic
+      schedule: "rate(60 minutes)"
+      role: arn:aws:iam::644835618190:role/C7N-AutoPark-Policy-Lambda-Role
+    actions:
+      - stop
+
+  - name: ec2-autopark-start-instances
+    description: Re-Start EC2 instances that were stopped offhours on a set schedule
+    resource: aws.ec2
+    comments: Start EC2 instances as per schedule in C7N_AutoPark_OffHours
+    filters:
+      - "tag:C7N_AutoPark_DISABLED": absent
+      - type: onhour
+        default_tz: "utc"
+        onhour: 5
+        tag: C7N_Scheduled_Downtime
+    mode:
+      schedule: "rate(60 minutes)"
+      type: periodic
+    actions:
+      - start

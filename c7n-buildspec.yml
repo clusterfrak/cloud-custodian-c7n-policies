@@ -1,0 +1,28 @@
+---
+version: 0.2
+
+# buildspec for CloudCustodian Policy Runner
+    
+phases:
+  install:
+    commands:
+      - apt-get update -y
+      - yum -y install jq
+      - pip install awscli virtualenv
+      - mkdir -p $CODEBUILD_SRC_DIR/c7n
+      - virtenv $CODEBUILD_SRC_DIR/c7n --python=python2
+      - source $CODEBUILD_SRC_DIR/c7n/bin/activate
+      - pip install --upgrade c7n
+      - deactivate
+
+  pre_build:
+    commands:
+      - echo "Running C7N policies marked for DryRun only..."
+      # - POLICY_LIST=$(find . -type f \( -name "*.yml" -o -name "*.yaml" \) ! -name "*buildspec*" -execdir echo {} ';') | xargs
+      - $POLICY_DRYRUN_LIST=$(cat c7nPolicies.json | jq '.[] | select(.DryRun==true) | .PolicyFile')
+      - for policy in `echo $POLICY_DRYRUN_LIST`; do $CODEBUILD_SRC_DIR/c7n/bin/custodian run --dryrun -s out $file; done
+  build:
+    commands:
+      - echo "Running C7N policies marked for deployment..."
+      - $POLICY_RUN_LIST=$(cat c7nPolicies.json | jq '.[] | select(.DryRun==false) | .PolicyFile')
+      - for policy in `echo $POLICY_RUN_LIST`; do $CODEBUILD_SRC_DIR/c7n/bin/custodian run -s out $file; done

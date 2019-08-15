@@ -1,0 +1,6 @@
+[
+    {
+        "PolicyFile": "c7n-auotpark.yml",
+        "DryRun": true
+    }
+]

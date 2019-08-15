@@ -7,7 +7,7 @@ phases:
   install:
     commands:
       - apt-get update -y
-      - yum -y install jq
+      - apt-get install -y jq
       - pip install awscli virtualenv
       - mkdir -p $CODEBUILD_SRC_DIR/c7n
       - virtenv $CODEBUILD_SRC_DIR/c7n --python=python2

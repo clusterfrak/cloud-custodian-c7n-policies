@@ -2,5 +2,9 @@
     {
         "PolicyFile": "c7n-autopark.yml",
         "DryRun": false
+    },
+    {
+        "PolicyFile": "c7n-tag-compliance-check.yml",
+        "DryRun": true
     }
 ]

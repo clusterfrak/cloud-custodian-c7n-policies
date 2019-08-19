@@ -1,0 +1,41 @@
+policies:
+  - name: ec2-tag-compliance-check
+    description: Check for instances that are running without the desired tags set on the resource.
+    resource: aws.ec2
+    comment: |
+      Find all (non-ASG) instances that are not compliant
+      to tagging policies and send a notification.
+    filters:
+      - "tag:aws:autoscaling:groupName": absent
+      - "tag:c7n_tag_compliance": absent
+      - or:
+        - "tag:DR Tier": absent
+        - "tag:Cost Center": absent
+        - "tag:Application ID": absent
+        - "tag:App / Project Name": absent
+        - "tag:App Partner": absent
+        - "tag:Backup": absent
+        - "tag:Environment": absent
+        - "tag:Cloud Custodian Tags": absent
+        - "tag:Compliance": absent
+        - "tag:Server/Resource Name": absent
+        - "tag:Region": absent
+    mode:
+      schedule: "rate(60 minutes)"
+      type: periodic
+      role: arn:aws:iam::644835618190:role/C7N-AutoPark-Policy-Lambda-Role
+    actions:
+      - type: mark-for-op
+        tag: c7n_tag_compliance
+        op: stop
+        days: 5
+      # - type: notify
+      #   action_desc: |
+      #     Offending EC2 instance(s) are now marked to be stopped if the
+      #     required tags not added within 24 hours.
+      #   subject: "EC2 Tag Compliance"
+      #   to: ["slack"]
+      #   transport:
+      #     type: sqs
+      #     queue: MESSAGEQUEUENAME
+      #   violation_desc: "EC2 instances must have the required tags."
